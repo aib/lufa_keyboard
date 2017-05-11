@@ -2,6 +2,7 @@ CC = avr-gcc
 CP = cp
 AVRDUDE = avrdude
 AVRDUDE_OPTS =
+LUFA_DIR = ./LUFA
 
 ARCH = ARCH_AVR8
 DEVICE = atmega32u4
@@ -45,21 +46,21 @@ lufakey: lufakey.hex
 	$(CP) lufakey.hex main.hex
 	avr-size main.hex
 
-HIDClassDevice.o: LUFA/Drivers/USB/Class/Device/HIDClassDevice.c
+HIDClassDevice.o: $(LUFA_DIR)/Drivers/USB/Class/Device/HIDClassDevice.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-USBController_AVR8.o: LUFA/Drivers/USB/Core/AVR8/USBController_AVR8.c
+USBController_AVR8.o: $(LUFA_DIR)/Drivers/USB/Core/AVR8/USBController_AVR8.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-USBTask.o: LUFA/Drivers/USB/Core/USBTask.c
+USBTask.o: $(LUFA_DIR)/Drivers/USB/Core/USBTask.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-Endpoint_AVR8.o: LUFA/Drivers/USB/Core/AVR8/Endpoint_AVR8.c
+Endpoint_AVR8.o: $(LUFA_DIR)/Drivers/USB/Core/AVR8/Endpoint_AVR8.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-EndpointStream_AVR8.o: LUFA/Drivers/USB/Core/AVR8/EndpointStream_AVR8.c
+EndpointStream_AVR8.o: $(LUFA_DIR)/Drivers/USB/Core/AVR8/EndpointStream_AVR8.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-USBInterrupt_AVR8.o: LUFA/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.c
+USBInterrupt_AVR8.o: $(LUFA_DIR)/Drivers/USB/Core/AVR8/USBInterrupt_AVR8.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-DeviceStandardReq.o: LUFA/Drivers/USB/Core/DeviceStandardReq.c
+DeviceStandardReq.o: $(LUFA_DIR)/Drivers/USB/Core/DeviceStandardReq.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
-Events.o: LUFA/Drivers/USB/Core/Events.c
+Events.o: $(LUFA_DIR)/Drivers/USB/Core/Events.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c -o $(@F) $^
 
 lufakey.elf: lufakey.o descriptor.o HIDClassDevice.o USBController_AVR8.o USBTask.o Endpoint_AVR8.o EndpointStream_AVR8.o USBInterrupt_AVR8.o DeviceStandardReq.o Events.o
