@@ -4,6 +4,9 @@
 
 static uint8_t report_buffer_prev[sizeof(USB_KeyboardReport_Data_t)];
 
+bool button_pressed = false;
+bool button_last_up = true;
+
 USB_ClassInfo_HID_Device_t hid_info = {
 	.Config = {
 		.InterfaceNumber = 0,
@@ -17,14 +20,27 @@ USB_ClassInfo_HID_Device_t hid_info = {
 	},
 };
 
+void button_tasks(void)
+{
+	bool button_up = PINC & 64;
+
+	if (button_last_up && !button_up) {
+		button_pressed = true;
+	}
+
+	button_last_up = button_up;
+}
+
 int main(void)
 {
 	USB_Init();
 
 	DDRB = 1;
+	DDRC = 0;
 	DDRD = 32;
 
 	PORTB = 1;
+	PORTC = 64; //Enable pull-up on PC6
 	PORTD = 32;
 
 	GlobalInterruptEnable();
@@ -32,6 +48,7 @@ int main(void)
 	while (true) {
 		HID_Device_USBTask(&hid_info);
 		USB_USBTask();
+		button_tasks();
 	}
 }
 
@@ -63,6 +80,13 @@ void EVENT_USB_Device_StartOfFrame(void)
 
 bool CALLBACK_HID_Device_CreateHIDReport(USB_ClassInfo_HID_Device_t* const HIDInterfaceInfo, uint8_t* const ReportID, const uint8_t ReportType, void* ReportData, uint16_t* const ReportSize)
 {
+	USB_KeyboardReport_Data_t *report = (USB_KeyboardReport_Data_t*) ReportData;
+
+	if (button_pressed) {
+		report->KeyCode[0] = HID_KEYBOARD_SC_CAPS_LOCK;
+		button_pressed = false;
+	}
+
 	*ReportSize = sizeof(USB_KeyboardReport_Data_t);
 	return false;
 }
