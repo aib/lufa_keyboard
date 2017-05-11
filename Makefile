@@ -1,6 +1,7 @@
 CC = avr-gcc
 CP = cp
 
+ARCH = ARCH_AVR8
 DEVICE = atmega32u4
 PROGRAMMER = usbasp
 PROGRAMMER_PORT = usb
@@ -8,7 +9,7 @@ F_CPU = 16000000
 FUSE_H = 0b10011001
 FUSE_L = 0b01011110
 
-CFLAGS = -Wall -O2 -mmcu=$(DEVICE) -DF_CPU=$(F_CPU)UL
+CFLAGS = -std=c99 -Wall -O2 -mmcu=$(DEVICE) -DF_CPU=$(F_CPU)UL -DF_USB=$(F_CPU)UL -DUSE_LUFA_CONFIG_HEADER -I.
 
 .PHONY: avrdude-test
 avrdude-test:
