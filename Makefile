@@ -1,5 +1,7 @@
 CC = avr-gcc
 CP = cp
+AVRDUDE = avrdude
+AVRDUDE_OPTS =
 
 ARCH = ARCH_AVR8
 DEVICE = atmega32u4
@@ -13,15 +15,15 @@ CFLAGS = -std=c99 -Wall -O2 -mmcu=$(DEVICE) -DF_CPU=$(F_CPU)UL -DF_USB=$(F_CPU)U
 
 .PHONY: avrdude-test
 avrdude-test:
-	avrdude -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -v
+	$(AVRDUDE) $(AVRDUDE_OPTS) -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -v
 
 .PHONY: program
 program: main.hex
-	avrdude -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -U flash:w:$<:i
+	$(AVRDUDE) $(AVRDUDE_OPTS) -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -U flash:w:$<:i
 
 .PHONY: program-fuses
 program-fuses:
-	avrdude -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -U hfuse:w:$(FUSE_H):m -U lfuse:w:$(FUSE_L):m
+	$(AVRDUDE) $(AVRDUDE_OPTS) -p $(DEVICE) -c $(PROGRAMMER) -P $(PROGRAMMER_PORT) -U hfuse:w:$(FUSE_H):m -U lfuse:w:$(FUSE_L):m
 
 .PHONY: clean
 clean:
