@@ -35,13 +35,14 @@ int main(void)
 {
 	USB_Init();
 
-	DDRB = 1;
-	DDRC = 0;
-	DDRD = 32;
+	DDRB = 1;  //Set left LED pin (PB0) to output
+	DDRD = 32; //Set right LED pin (PD5) to output
 
-	PORTB = 1;
+	PORTB = 1;  //Turn off left LED (inverted)
+	PORTD = 32; //Turn off right LED (inverted)
+
+	DDRC = 0;   //Make PC6 and PC7 (Arduino 5 and 13) inputs
 	PORTC = 64; //Enable pull-up on PC6
-	PORTD = 32;
 
 	GlobalInterruptEnable();
 
